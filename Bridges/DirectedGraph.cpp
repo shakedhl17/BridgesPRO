@@ -63,7 +63,8 @@ void DirectedGraph::DeleteEdge(int v, int u)
 void DirectedGraph::DFS()
 {
 	vector<Vertex*>::iterator vItr = this->vertices.begin();
-	while (vItr != this->vertices.end())
+	vector<Vertex*>::iterator vItrEnd = this->vertices.end();
+	while (vItr != vItrEnd)
 	{
 		(*vItr)->setVertexColor("white");
 		++vItr;
@@ -91,14 +92,13 @@ void DirectedGraph::DFSByMainLoop(vector<int> mainLoop)
 	}
 
 	vector<int>::const_iterator itr = mainLoop.begin();
-
-	while (itr != mainLoop.end())
+	vector<int>::const_iterator itrEnd = mainLoop.end();
+	while (itr != itrEnd)
 	{
-		if ((*itr) == "white")
-			this->Visit((*vItr)->getVertexNum(), (*vItr)->getVertexNum());
-		++vItr;
+		if (this->vertices[(*itr)]->getVertexColor() == "white")
+			this->Visit(this->vertices[(*itr)]->getVertexNum(), this->vertices[(*itr)]->getVertexNum());
+		++itr;
 	}
-
 }
 
 //This function is the visit function in the DFS algoritem
