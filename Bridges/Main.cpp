@@ -3,13 +3,18 @@ using namespace std;
 
 int main()
 {
-
+	int n = getVerticesNum();
+	DirectedGraph g(n);
+	int m = getEdgesNum();
+	for (int i = 0; i < m; i++)
+		getEdges(g);
+	if (isGraphStronglyConnected(g))
+		printBridgesInDirGraph(g);
 }
 
 int getVerticesNum()
 {
 	int vNum;
-	cout << "Type in the vertices number: ";
 	cin >> vNum;
 	return vNum;
 }
@@ -17,7 +22,6 @@ int getVerticesNum()
 int getEdgesNum()
 {
 	int eNum;
-	cout << "Type in the edges number: ";
 	cin >> eNum;
 	return eNum;
 }
@@ -25,9 +29,7 @@ int getEdgesNum()
 void getEdges(DirectedGraph& G)
 {
 	int inVNum, outVNum;
-	cout << "Type in the edge in vertex number: ";
 	cin >> inVNum;
-	cout << "Type in the edge out vertex number: ";
 	cin >> outVNum;
 	G.AddEdge(inVNum, outVNum);
 }
@@ -39,13 +41,14 @@ bool isGraphConnected(NotDirectedGraph& G)
 
 bool isGraphStronglyConnected(DirectedGraph& G)
 {
-	G.DFS();
+	G.Visit(0, 0);
 	std::vector<Vertex*> gVertices = G.getVertices();
 	std::vector<Vertex*>::iterator gVItr = gVertices.begin();
 	while (gVItr != gVertices.end())
 	{
 		if ((*gVItr)->getVertexColor() == "white")
 			return false;
+		++gVItr;
 	}
 	return true;
 }
@@ -54,13 +57,16 @@ void printBridgesInDirGraph(DirectedGraph& G)
 {
 	G.DFS();
 	list<int> endList = G.getEndList();
-
+	DirectedGraph* GT = createGt(G);
+	GT->DFSByMainLoop(endList);
+	GT->printBridges();
+	delete GT;
 }
 
-DirectedGraph& createGt(vector<int> endlist, DirectedGraph& G)
+DirectedGraph* createGt(DirectedGraph& G)
 {
 	int vNum = G.getVNumber();
-	DirectedGraph Gt(vNum);
-	Gt.makeTransposeGraph(G);
-	return Gt; // here is the problem Shaked
+	DirectedGraph* Gt= new DirectedGraph(vNum);
+	Gt->makeTransposeGraph(G);
+	return Gt; 
 }

@@ -15,11 +15,11 @@ public:
 	~DirectedGraph();
 	
 	bool AreVPointsToU(int v, int u) const;
-	void AddEdge(int v, int u);
-	void DeleteEdge(int v, int u);
+	virtual void AddEdge(int v, int u);
+	virtual void DeleteEdge(int v, int u);
 
 	void DFS();
-	void DFSByMainLoop(std::vector<int> mainLoop);
+	void DFSByMainLoop(std::list<int> mainLoop);
 	void Visit(int v, int currRoot);
 	bool isParent(const int currV,const int suspectParent) const;
 
@@ -27,6 +27,6 @@ public:
 	std::list<int> getEndList() const;
 	const int getVNumber() { return this->VNumber; };
 	void makeTransposeGraph(DirectedGraph& g);
-
+	void printBridges() const;
 };
 #endif

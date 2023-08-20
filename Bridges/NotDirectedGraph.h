@@ -7,13 +7,16 @@
 
 class NotDirectedGraph : public Graph
 {
-	std::vector<Vertex> vertices;
-	std::vector<std::list<NotDirectedEdge>> lstOfNeighborhods;
+	std::vector<Vertex*> vertices;
+	std::vector<std::list<NotDirectedEdge*>> lstOfNeighborhods;
 public:
 	NotDirectedGraph* MakeGraph(const int n);
 	bool AreNeighbors(int v, int u) const;
 	void AddEdge(int v, int u);
 	void DeleteEdge(int v, int u);
+	void DFS();
+	void Visit(int v, int currRoot);
+	bool isParent(const int currV, const int suspectParent) const;
 };
 #endif
 

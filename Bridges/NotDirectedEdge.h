@@ -6,7 +6,7 @@
 
 class NotDirectedEdge : public Edge
 {
-	std::list< NotDirectedEdge>::iterator pNDEdgeMutual;
+	std::list< NotDirectedEdge*>::iterator pNDEdgeMutual;
 	bool marked;
 public:
 	
@@ -14,11 +14,12 @@ public:
 	NotDirectedEdge(const int secV) : Edge(secV), marked(false) {};
 
 	//get and set edge mutual pointer
-	void setEdgeMutualPointer(std::list< NotDirectedEdge>::iterator pMutualEdge) { this->pNDEdgeMutual = pMutualEdge; };
-	std::list< NotDirectedEdge>::iterator getEdgeMutualPointer() { return this->pNDEdgeMutual; };
+	void setEdgeMutualPointer(std::list< NotDirectedEdge*>::iterator pMutualEdge) { this->pNDEdgeMutual = pMutualEdge; };
+	std::list< NotDirectedEdge*>::iterator getEdgeMutualPointer() { return this->pNDEdgeMutual; };
 
 	//get and set edge mark - for knowing if we visit this edge by the mutual pointer
 	void setEdgeMark(bool m) { this->marked = m; };
 	bool getEdgeMark() { return this->marked; };
+
 };
 #endif

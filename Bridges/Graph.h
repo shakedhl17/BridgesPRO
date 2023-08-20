@@ -14,8 +14,8 @@ protected:
 	std::vector<int> parents;
 	std::list<int> endVisit;
 public:
-	virtual void AddEdge(int v, int u);
-	virtual void DeleteEdge(int v, int u);
+	virtual void AddEdge(int v, int u) =0;
+	virtual void DeleteEdge(int v, int u)=0;
 	virtual std::list<int> getEndList() const = 0;
 
 	const int getVNumber() { return this->VNumber; };

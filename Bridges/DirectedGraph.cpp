@@ -10,12 +10,14 @@ DirectedGraph::DirectedGraph(const int n)
 	//set the vertices in the vertices vector
 	for (int i = 0; i < this->VNumber; i++)
 	{
-		Vertex* tmpV = new Vertex(i);
+		Vertex* tmpV = new Vertex(i+1);
 		this->vertices.push_back(tmpV);
 	}
 	
 	// preparing the neighbors vertices lists
 	this->edges.resize(this->VNumber);
+
+	this->parents.resize(this->VNumber);
 }
 
 // return if v is a neighbor of u
@@ -23,11 +25,11 @@ bool DirectedGraph::AreVPointsToU(int v, int u) const
 {
 	if (!this->edges[v].empty())
 	{
-		list<Edge*>::const_iterator findIter = this->edges[v].begin();
-		list<Edge*>::const_iterator endIter = this->edges[v].end();
+		list<Edge*>::const_iterator findIter = this->edges[v-1].begin();
+		list<Edge*>::const_iterator endIter = this->edges[v-1].end();
 		while (findIter != endIter)
 		{
-			if ((*findIter)->getOutVertex() == u)
+			if ((*findIter)->getOutVertex() == u-1)
 				return true;
 			++findIter;
 		}
@@ -39,19 +41,19 @@ bool DirectedGraph::AreVPointsToU(int v, int u) const
 void DirectedGraph::AddEdge(int v, int u)
 {
 	this->Enumber++;
-	Edge* tmp = new Edge(u);
-	this->edges[v].push_back(tmp);
+	Edge* tmp = new Edge(u-1);
+	this->edges[v-1].push_back(tmp);
 }
 
 //this function is deleting the given edge
 void DirectedGraph::DeleteEdge(int v, int u)
 {
-	list<Edge*>::const_iterator findIter = this->edges[v].begin();
-	while (findIter != this->edges[v].end())
+	list<Edge*>::const_iterator findIter = this->edges[v-1].begin();
+	while (findIter != this->edges[v-1].end())
 	{
-		if ((*findIter)->getOutVertex() == u)
+		if ((*findIter)->getOutVertex() == u-1)
 		{
-			this->edges[v].remove((*findIter));
+			this->edges[v-1].remove((*findIter));
 			delete (*findIter);
 			break;
 		}
@@ -71,17 +73,16 @@ void DirectedGraph::DFS()
 	}
 
 	vItr = this->vertices.begin();
-
 	while (vItr != this->vertices.end())
 	{
 		if ((*vItr)->getVertexColor() == "white")
-			this->Visit((*vItr)->getVertexNum(), (*vItr)->getVertexNum());
+			this->Visit((*vItr)->getVertexNum()-1, (*vItr)->getVertexNum()-1);
 		++vItr;
 	}
 
 }
 
-void DirectedGraph::DFSByMainLoop(vector<int> mainLoop)
+void DirectedGraph::DFSByMainLoop(list<int> mainLoop)
 {
 	vector<Vertex*>::iterator vItr = this->vertices.begin();
 
@@ -91,12 +92,12 @@ void DirectedGraph::DFSByMainLoop(vector<int> mainLoop)
 		++vItr;
 	}
 
-	vector<int>::const_iterator itr = mainLoop.begin();
-	vector<int>::const_iterator itrEnd = mainLoop.end();
+	list<int>::const_iterator itr = mainLoop.begin();
+	list<int>::const_iterator itrEnd = mainLoop.end();
 	while (itr != itrEnd)
 	{
 		if (this->vertices[(*itr)]->getVertexColor() == "white")
-			this->Visit(this->vertices[(*itr)]->getVertexNum(), this->vertices[(*itr)]->getVertexNum());
+			this->Visit(this->vertices[(*itr)]->getVertexNum()-1, this->vertices[(*itr)]->getVertexNum()-1);
 		++itr;
 	}
 }
@@ -193,5 +194,21 @@ DirectedGraph::~DirectedGraph()
 		for (Edge* edgePtr : edgeList) {
 			delete edgePtr;
 		}
+	}
+}
+
+void DirectedGraph::printBridges() const
+{
+	for (int i = 0; i < this->VNumber; i++)
+	{
+		list<Edge*>::const_iterator eItr = this->edges[i].begin();
+		list<Edge*>::const_iterator eItrEnd = this->edges[i].end();
+		while (eItr != eItrEnd)
+		{
+			if ((*eItr)->getEdgeType() == "crossArc")
+				cout << i+1 << (*eItr)->getOutVertex()+1;
+			++eItr;
+		}
+
 	}
 }

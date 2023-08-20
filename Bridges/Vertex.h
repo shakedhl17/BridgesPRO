@@ -10,7 +10,7 @@ class Vertex
 	std::string vColor;
 
 public:
-	Vertex(int v) : vNum(v) {};
+	Vertex(int v) : vNum(v), vColor("white") {};
 	void setVertexColor(std::string color) { this->vColor = color; };
 	std::string getVertexColor() const { return this->vColor; };
 	int getVertexNum() const { return this->vNum; };
