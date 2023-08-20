@@ -10,8 +10,9 @@ class DirectedGraph: public Graph
 	std::vector<std::list<Edge*>> edges;
 public:
 
-	//c'tor
+	//c'tor & d'tor
 	DirectedGraph(const int n);
+	~DirectedGraph();
 	
 	bool AreVPointsToU(int v, int u) const;
 	void AddEdge(int v, int u);
@@ -23,7 +24,7 @@ public:
 	bool isParent(const int currV,const int suspectParent) const;
 
 	std::vector<Vertex*>& getVertices();
-	std::vector<int> getEndList() const;
+	std::list<int> getEndList() const;
 	const int getVNumber() { return this->VNumber; };
 	void makeTransposeGraph(DirectedGraph& g);
 

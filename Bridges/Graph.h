@@ -12,11 +12,11 @@ class Graph
 protected:
 	int VNumber, Enumber;
 	std::vector<int> parents;
-	std::vector<int> endVisit;
+	std::list<int> endVisit;
 public:
 	virtual void AddEdge(int v, int u);
 	virtual void DeleteEdge(int v, int u);
-	virtual std::vector<int> getEndList() const = 0;
+	virtual std::list<int> getEndList() const = 0;
 
 	const int getVNumber() { return this->VNumber; };
 };
