@@ -39,7 +39,7 @@ bool isGraphConnected(NotDirectedGraph& G)
 
 bool isGraphStronglyConnected(DirectedGraph& G)
 {
-	G.DFS(0);
+	G.DFS();
 	std::vector<Vertex*> gVertices = G.getVertices();
 	std::vector<Vertex*>::iterator gVItr = gVertices.begin();
 	while (gVItr != gVertices.end())
@@ -52,8 +52,8 @@ bool isGraphStronglyConnected(DirectedGraph& G)
 
 void printBridgesInDirGraph(DirectedGraph& G)
 {
-	G.DFS(0);
-	vector<int> endList = G.getEndList();
+	G.DFS();
+	list<int> endList = G.getEndList();
 
 }
 
@@ -62,5 +62,5 @@ DirectedGraph& createGt(vector<int> endlist, DirectedGraph& G)
 	int vNum = G.getVNumber();
 	DirectedGraph Gt(vNum);
 	Gt.makeTransposeGraph(G);
-
+	return Gt; // here is the problem Shaked
 }
