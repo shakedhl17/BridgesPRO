@@ -19,7 +19,7 @@ public:
 	void DeleteEdge(int v, int u);
 
 	void DFS();
-	void DFSByMainLoop(vector<int> mainLoop);
+	void DFSByMainLoop(std::vector<int> mainLoop);
 	void Visit(int v, int currRoot);
 	bool isParent(const int currV,const int suspectParent) const;
 
