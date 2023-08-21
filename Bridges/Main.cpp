@@ -4,12 +4,13 @@ using namespace std;
 int main()
 {
 	int n = getVerticesNum();
-	DirectedGraph g(n);
+	Graph g(n,false);
 	int m = getEdgesNum();
+
 	for (int i = 0; i < m; i++)
 		getEdges(g);
-	if (isGraphStronglyConnected(g))
-		printBridgesInDirGraph(g);
+	if(isGraphConnected(g))
+		printBridges(g);
 }
 
 int getVerticesNum()
@@ -26,7 +27,7 @@ int getEdgesNum()
 	return eNum;
 }
 
-void getEdges(DirectedGraph& G)
+void getEdges(Graph& G)
 {
 	int inVNum, outVNum;
 	cin >> inVNum;
@@ -34,39 +35,34 @@ void getEdges(DirectedGraph& G)
 	G.AddEdge(inVNum, outVNum);
 }
 
-bool isGraphConnected(NotDirectedGraph& G)
+bool isGraphConnected(Graph& G)
 {
-	return true;
-}
-
-bool isGraphStronglyConnected(DirectedGraph& G)
-{
-	G.Visit(0, 0);
-	std::vector<Vertex*> gVertices = G.getVertices();
-	std::vector<Vertex*>::iterator gVItr = gVertices.begin();
-	while (gVItr != gVertices.end())
+	G.VisitNotDirectedGraph(0);
+	Vertex** gVertices = G.getVertices();
+	int vNum = G.getVNumber();
+	for (int i = 0; i < vNum; i++)
 	{
-		if ((*gVItr)->getVertexColor() == "white")
+		if (gVertices[i]->getVertexColor() == "white")
 			return false;
-		++gVItr;
 	}
 	return true;
 }
 
-void printBridgesInDirGraph(DirectedGraph& G)
+void printBridges(Graph& G)
 {
+	//we will do a dfs that make g a directed graph
 	G.DFS();
-	list<int> endList = G.getEndList();
-	DirectedGraph* GT = createGt(G);
+	LinkedList<int> endList = G.getEndList();
+	Graph* GT = createGt(G);
 	GT->DFSByMainLoop(endList);
 	GT->printBridges();
 	delete GT;
 }
 
-DirectedGraph* createGt(DirectedGraph& G)
+Graph* createGt(Graph& G)
 {
 	int vNum = G.getVNumber();
-	DirectedGraph* Gt= new DirectedGraph(vNum);
+	Graph* Gt= new Graph(vNum, true);
 	Gt->makeTransposeGraph(G);
 	return Gt; 
 }
