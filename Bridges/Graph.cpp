@@ -61,7 +61,7 @@ void Graph::AddEdge(int v, int u)
 			this->lstOfNeighborhods[u]->pushFront(newUEdge);
 
 			newVEdge->setEdgeMutualPointer(this->lstOfNeighborhods[u]->getHead());
-			newUEdge->setEdgeMutualPointer(this->lstOfNeighborhods[u]->getHead());
+			newUEdge->setEdgeMutualPointer(this->lstOfNeighborhods[v]->getHead());
 
 		}
 	}
@@ -107,10 +107,12 @@ void Graph::DFSByMainLoop(LinkedList<int> mainLoop)
 		this->vertices[i]->setVertexColor("white");
 	
 	LinkedList<int>::Node* currNode = mainLoop.getHead();
-	while(currNode!= nullptr)
+	while (currNode != nullptr)
+	{
 		if (this->vertices[currNode->data]->getVertexColor() == "white")
 			this->VisitDirectedGraph(currNode->data, currNode->data);
-
+		currNode = currNode->next;
+	}
 	if (!this->isDirected)
 		this->isDirected = true;
 }
