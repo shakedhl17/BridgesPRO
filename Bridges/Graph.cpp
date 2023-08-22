@@ -61,7 +61,7 @@ void Graph::AddEdge(int v, int u)
 			this->lstOfNeighborhods[u]->pushFront(newUEdge);
 
 			newVEdge->setEdgeMutualPointer(this->lstOfNeighborhods[u]->getHead());
-			newUEdge->setEdgeMutualPointer(this->lstOfNeighborhods[u]->getHead());
+			newUEdge->setEdgeMutualPointer(this->lstOfNeighborhods[v]->getHead());
 
 		}
 	}
@@ -107,9 +107,12 @@ void Graph::DFSByMainLoop(LinkedList<int> mainLoop)
 		this->vertices[i]->setVertexColor("white");
 	
 	LinkedList<int>::Node* currNode = mainLoop.getHead();
-	while(currNode!= nullptr)
+	while (currNode != nullptr)
+	{
 		if (this->vertices[currNode->data]->getVertexColor() == "white")
 			this->VisitDirectedGraph(currNode->data, currNode->data);
+		currNode = currNode->next;
+	}
 
 	if (!this->isDirected)
 		this->isDirected = true;
@@ -159,15 +162,15 @@ void Graph::VisitDirectedGraph(int v, int currRoot)
 	LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v]->getHead();
 	while (currNode != nullptr)
 	{
-		if (!this->isDirected)
-		{
-			this->lstOfNeighborhods[currNode->data->getOutVertex()]->remove(currNode->data->getEdgeMutualPointer()); // Nir the exception is thrown here
-			currNode->data->setEdgeMutualPointer(nullptr);
-		}
 		//checks the curr v neighbor type and handle for each case
 		if (this->vertices[currNode->data->getOutVertex()]->getVertexColor() == "white")
 		{
 			currNode->data->setEdgeType("treeArc");
+			if (!this->isDirected)
+			{
+				this->lstOfNeighborhods[currNode->data->getOutVertex()]->remove(currNode->data->getEdgeMutualPointer()); // Nir the exception is thrown here
+				currNode->data->setEdgeMutualPointer(nullptr);
+			}
 			this->VisitDirectedGraph(currNode->data->getOutVertex(), currRoot);
 		}
 		else if (this->vertices[currNode->data->getOutVertex()]->getVertexColor() == "gray")
@@ -212,10 +215,10 @@ void Graph::makeTransposeGraph(Graph& g)
 {
 	for (int i = 0; i < g.VNumber; i++)
 	{
-		LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[i]->getHead();
+		LinkedList<Edge*>::Node* currNode = g.lstOfNeighborhods[i]->getHead();
 		while (currNode!=nullptr)
 		{
-			this->AddEdge(currNode->data->getOutVertex(), i);
+			this->AddEdge(currNode->data->getOutVertex()+1, i+1);
 			currNode = currNode->next;
 		}
 

@@ -13,7 +13,7 @@ protected:
 public:
 
 	Edge(const int out) : outVertex(out), edgeType("none"), marked(false) {};
-
+	~Edge() { if (pNDEdgeMutual) { delete pNDEdgeMutual; pNDEdgeMutual = nullptr; } }
 	//get and set edge type - for DFS
 	void setEdgeType(std::string eType) { this->edgeType = eType; };
 	std::string getEdgeType() const { return this->edgeType; };
