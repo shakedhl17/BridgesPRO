@@ -7,6 +7,7 @@ Graph::Graph(const int n, bool isDir)
 	this->VNumber = n;
 	this->vertices = new Vertex * [this->VNumber];
 	this->parents = new int [this->VNumber];
+	this->lstOfNeighborhods = new LinkedList<Edge*>*[this->VNumber];
 	this->Enumber = 0;
 
 	//set the vertices in the vertices vector
@@ -18,15 +19,14 @@ Graph::Graph(const int n, bool isDir)
 
 	for (int i = 0; i < this->VNumber; i++)
 	{
-		LinkedList<Edge*>* tmpV = new LinkedList<Edge*>();
-		this->lstOfNeighborhods[i] = tmpV;
+		this->lstOfNeighborhods[i] = new LinkedList<Edge*>();
 	}
 }
 
 bool Graph::AreNeighbors(int v, int u) const
 {
 	LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v - 1]->getHead();
-	while (currNode->next != nullptr)
+	while (currNode != nullptr)
 	{
 		if (currNode->data->getOutVertex() == u - 1)
 			return true;
@@ -74,7 +74,7 @@ void Graph::DeleteEdge(int v, int u)
 		//reduce the edges number
 		this->Enumber--;
 		LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v - 1]->getHead();
-		while (currNode->next != nullptr)
+		while (currNode!= nullptr)
 		{
 			if (currNode->data->getOutVertex() == u - 1)
 			{
@@ -107,7 +107,7 @@ void Graph::DFSByMainLoop(LinkedList<int> mainLoop)
 		this->vertices[i]->setVertexColor("white");
 	
 	LinkedList<int>::Node* currNode = mainLoop.getHead();
-	while(currNode->next!= nullptr)
+	while(currNode!= nullptr)
 		if (this->vertices[currNode->data]->getVertexColor() == "white")
 			this->VisitDirectedGraph(currNode->data, currNode->data);
 
@@ -120,8 +120,8 @@ void Graph::VisitNotDirectedGraph(int v)
 {
 	//set the current vertex (v) to be type gray
 	this->vertices[v]->setVertexColor("gray");
-	LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v - 1]->getHead();
-	while (currNode->next != nullptr)
+	LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v]->getHead();
+	while (currNode != nullptr)
 	{
 		if (currNode->data->getEdgeMark() == false)
 		{
@@ -156,12 +156,13 @@ void Graph::VisitDirectedGraph(int v, int currRoot)
 
 	//set the current vertex (v) to be type gray
 	this->vertices[v]->setVertexColor("gray");
-	LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v - 1]->getHead();
-	while (currNode->next != nullptr)
+	LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v]->getHead();
+	while (currNode != nullptr)
 	{
 		if (!this->isDirected)
 		{
-			this->lstOfNeighborhods[currNode->data->getOutVertex()]->remove(currNode->data->getEdgeMutualPointer());
+			this->lstOfNeighborhods[currNode->data->getOutVertex()]->remove(currNode->data->getEdgeMutualPointer()); // Nir the exception is thrown here
+			currNode->data->setEdgeMutualPointer(nullptr);
 		}
 		//checks the curr v neighbor type and handle for each case
 		if (this->vertices[currNode->data->getOutVertex()]->getVertexColor() == "white")
@@ -212,7 +213,7 @@ void Graph::makeTransposeGraph(Graph& g)
 	for (int i = 0; i < g.VNumber; i++)
 	{
 		LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[i]->getHead();
-		while (currNode->next!=nullptr)
+		while (currNode!=nullptr)
 		{
 			this->AddEdge(currNode->data->getOutVertex(), i);
 			currNode = currNode->next;
@@ -227,7 +228,7 @@ void Graph::printBridges() const
 	for (int i = 0; i < this->VNumber; i++)
 	{
 		LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[i]->getHead();
-		while (currNode->next != nullptr)
+		while (currNode != nullptr)
 		{
 			if (currNode->data->getEdgeType() == "crossArc")
 				cout << i + 1 << currNode->data->getOutVertex() + 1;
