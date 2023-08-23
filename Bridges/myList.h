@@ -7,27 +7,49 @@ public:
     struct Node {
         T data;
         Node* next;
+        Node* prev; // New member for the previous node
 
-        Node(const T& value) : data(value), next(nullptr) {};
+        Node(const T& value) : data(value), next(nullptr), prev(nullptr) {}
     };
-    
-    Node* head;
 
-    LinkedList() : head(nullptr) {};
+    Node* head;
+    Node* tail;
+
+    LinkedList() : head(nullptr), tail(nullptr) {}
 
     ~LinkedList() {
-        while (head) {
+        while (head != nullptr) {
             Node* temp = head;
             head = head->next;
             delete temp;
         }
-    };
+    }
 
     void pushFront(const T& value) {
         Node* newNode = new Node(value);
         newNode->next = head;
+        newNode->prev = nullptr; // New node is the head, so no previous node
+        if (head) {
+            head->prev = newNode;
+        }
+        else {
+            tail = newNode; // If the list was empty, the new node becomes the tail
+        }
         head = newNode;
-    };
+    }
+
+    void pushBack(const T& value) {
+        Node* newNode = new Node(value);
+        newNode->next = nullptr; // New node is the tail, so no next node
+        newNode->prev = tail;
+        if (tail) {
+            tail->next = newNode;
+        }
+        else {
+            head = newNode; // If the list was empty, the new node becomes the head
+        }
+        tail = newNode;
+    }
 
     void print() const {
         Node* current = head;
@@ -36,7 +58,7 @@ public:
             current = current->next;
         }
         std::cout << std::endl;
-    };
+    }
 
     bool remove(Node* nodeToRemove) {
         if (!nodeToRemove) {
@@ -44,56 +66,64 @@ public:
         }
 
         Node* current = head;
-        Node* prev = nullptr;
-
         while (current != nullptr) {
             if (current == nodeToRemove) {
-                if (prev == nullptr) {
-                    // If the node to remove is the head
-                    head = current->next;
+                if (current->prev) {
+                    current->prev->next = current->next;
                 }
                 else {
-                    prev->next = current->next;
+                    head = current->next;
+                }
+
+                if (current->next) {
+                    current->next->prev = current->prev;
+                }
+                else {
+                    tail = current->prev;
                 }
 
                 delete current;
                 return true; // Successfully removed the node
             }
-
-            prev = current;
             current = current->next;
         }
 
         return false; // Node not found in the list
-    };
+    }
 
     bool remove(const T& value) {
         Node* current = head;
-        Node* prev = nullptr;
-
         while (current != nullptr) {
             if (current->data == value) {
-                if (prev == nullptr) {
-                    // If the node to remove is the head
-                    head = current->next;
+                if (current->prev) {
+                    current->prev->next = current->next;
                 }
                 else {
-                    prev->next = current->next;
+                    head = current->next;
+                }
+
+                if (current->next) {
+                    current->next->prev = current->prev;
+                }
+                else {
+                    tail = current->prev;
                 }
 
                 delete current;
                 return true; // Successfully removed the value
             }
-
-            prev = current;
             current = current->next;
         }
 
         return false; // Value not found in the list
-    };
+    }
 
     Node* getHead() const {
         return head;
-    };
+    }
+
+    Node* getTail() const {
+        return tail;
+    }
 };
 #endif

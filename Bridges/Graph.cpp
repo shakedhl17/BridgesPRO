@@ -1,6 +1,7 @@
 #include "Graph.h"
 using namespace std;
 
+//C'tor
 Graph::Graph(const int n, bool isDir)
 {
 	this->isDirected = isDir;
@@ -23,6 +24,7 @@ Graph::Graph(const int n, bool isDir)
 	}
 }
 
+//Check if u and v are neighbors in the graph
 bool Graph::AreNeighbors(int v, int u) const
 {
 	LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[v - 1]->getHead();
@@ -35,6 +37,7 @@ bool Graph::AreNeighbors(int v, int u) const
 	return false;
 }
 
+//Add the edge (v,u) to the graph
 void Graph::AddEdge(int v, int u)
 {
 	if (!this->AreNeighbors(v, u))
@@ -57,8 +60,8 @@ void Graph::AddEdge(int v, int u)
 			Edge* newUEdge = new Edge(v);
 
 			//adding the edges to the list of neighborhods
-			this->lstOfNeighborhods[v]->pushFront(newVEdge);
-			this->lstOfNeighborhods[u]->pushFront(newUEdge);
+			this->lstOfNeighborhods[v]->pushBack(newVEdge);
+			this->lstOfNeighborhods[u]->pushBack(newUEdge);
 
 			newVEdge->setEdgeMutualPointer(this->lstOfNeighborhods[u]->getHead());
 			newUEdge->setEdgeMutualPointer(this->lstOfNeighborhods[v]->getHead());
@@ -67,6 +70,7 @@ void Graph::AddEdge(int v, int u)
 	}
 }
 
+//Delete the edge (v,u) fron the graph
 void Graph::DeleteEdge(int v, int u)
 {
 	if (this->AreNeighbors(v, u))
@@ -89,6 +93,7 @@ void Graph::DeleteEdge(int v, int u)
 	}
 }
 
+//DFS algoritem based on the vertices array as main loop
 void Graph::DFS()
 {
 	for (int i = 0; i < this->VNumber; i++)
@@ -101,6 +106,7 @@ void Graph::DFS()
 		this->isDirected = true;
 }
 
+//DFS algoritem based on a given main loops
 void Graph::DFSByMainLoop(LinkedList<int> mainLoop)
 {
 	for (int i = 0; i < this->VNumber; i++)
@@ -118,7 +124,7 @@ void Graph::DFSByMainLoop(LinkedList<int> mainLoop)
 		this->isDirected = true;
 }
 
-//This function is the visit function in the DFS algoritem
+//This function is the visit function in the DFS algoritem for a not directed graph
 void Graph::VisitNotDirectedGraph(int v)
 {
 	//set the current vertex (v) to be type gray
@@ -148,7 +154,7 @@ void Graph::VisitNotDirectedGraph(int v)
 	this->endVisit.pushFront(v);
 }
 
-//This function is the visit function in the DFS algoritem
+//This function is the visit function in the DFS algoritem for a directed graph or to direct a not directedd graph
 void Graph::VisitDirectedGraph(int v, int currRoot)
 {
 	//set the v parent to currRoot
@@ -199,6 +205,7 @@ bool Graph::isParent(const int currV, const int suspectParent) const
 	return isParent(this->parents[currV], suspectParent);
 }
 
+//get the endList of the dfs algoritem
 LinkedList<int> Graph::getEndList() const
 {
 	return this->endVisit;
@@ -210,7 +217,7 @@ Vertex** Graph::getVertices()
 	return this->vertices;
 }
 
-//create this directed-graph a traspose graph of the directed graph given - g
+//Create this directed-graph a traspose graph of the directed graph given - g
 void Graph::makeTransposeGraph(Graph& g)
 {
 	for (int i = 0; i < g.VNumber; i++)
@@ -225,7 +232,7 @@ void Graph::makeTransposeGraph(Graph& g)
 	}
 }
 
-
+//Print the bridges in the graph
 void Graph::printBridges() const
 {
 	for (int i = 0; i < this->VNumber; i++)
@@ -234,8 +241,25 @@ void Graph::printBridges() const
 		while (currNode != nullptr)
 		{
 			if (currNode->data->getEdgeType() == "crossArc")
-				cout << i + 1 << currNode->data->getOutVertex() + 1;
+				cout << i + 1 <<" " << currNode->data->getOutVertex() + 1<< endl;
 			currNode = currNode->next;
 		} 
 	}
 };
+
+//D'tor
+Graph::~Graph()
+{
+	delete[] parents;
+
+	for (int i = 0; i < VNumber; ++i)
+	{
+		if (vertices[i] != nullptr)
+		{
+			delete vertices[i];
+		}
+	}
+
+	delete[] lstOfNeighborhods;
+	delete[] vertices;
+}
