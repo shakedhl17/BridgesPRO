@@ -140,17 +140,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Edge.h" />
-    <ClInclude Include="DirectedGraph.h" />
     <ClInclude Include="Graph.h" />
-    <ClInclude Include="NotDirectedEdge.h" />
-    <ClInclude Include="NotDirectedGraph.h" />
+    <ClInclude Include="myList.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DirectedGraph.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="NotDirectedGraph.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
