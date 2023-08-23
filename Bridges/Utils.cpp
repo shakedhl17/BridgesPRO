@@ -5,6 +5,11 @@ int getVerticesNum()
 {
 	int vNum;
 	cin >> vNum;
+	if (vNum <= 0)
+	{
+		cout << "Invalid input";
+		exit(1);
+	}
 	return vNum;
 }
 
@@ -12,6 +17,11 @@ int getEdgesNum()
 {
 	int eNum;
 	cin >> eNum;
+	if (eNum <= 0)
+	{
+		cout << "Invalid input";
+		exit(1);
+	}
 	return eNum;
 }
 
