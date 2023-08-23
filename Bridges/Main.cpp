@@ -9,6 +9,9 @@ int main()
 
 	for (int i = 0; i < m; i++)
 		getEdges(g);
-	if(isGraphConnected(g))
+	if (isGraphConnected(g))
 		printBridges(g);
+	else
+		cout << "Graph is not connected";
+
 }

@@ -17,14 +17,6 @@ public:
 
     LinkedList() : head(nullptr), tail(nullptr) {}
 
-   /* ~LinkedList() {
-        while (head != nullptr) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-        }
-    }*/
-
     void pushFront(const T& value) {
         Node* newNode = new Node(value);
         newNode->next = head;

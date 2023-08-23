@@ -40,6 +40,11 @@ bool Graph::AreNeighbors(int v, int u) const
 //Add the edge (v,u) to the graph
 void Graph::AddEdge(int v, int u)
 {
+	if (u <= 0 || u > this->VNumber || v <= 0 || v > this->VNumber)
+	{
+		cout << "Invalid input";
+		exit(1);
+	}
 	if (!this->AreNeighbors(v, u))
 	{
 		v--;
@@ -235,32 +240,21 @@ void Graph::makeTransposeGraph(Graph& g)
 //Print the bridges in the graph
 void Graph::printBridges() const
 {
+	bool isBridge = false;
 	for (int i = 0; i < this->VNumber; i++)
 	{
 		LinkedList<Edge*>::Node* currNode = this->lstOfNeighborhods[i]->getHead();
 		while (currNode != nullptr)
 		{
 			if (currNode->data->getEdgeType() == "crossArc")
-				cout << i + 1 <<" " << currNode->data->getOutVertex() + 1<< endl;
+			{
+				cout << i + 1 << " " << currNode->data->getOutVertex() + 1 << endl;
+				isBridge = true;
+			}
 			currNode = currNode->next;
 		} 
 	}
+
+	if (!isBridge)
+		cout << "No bridges in graph";
 };
-
-//D'tor
-/*
-Graph::~Graph()
-{
-	delete[] parents;
-
-	for (int i = 0; i < VNumber; ++i)
-	{
-		if (vertices[i] != nullptr)
-		{
-			delete vertices[i];
-		}
-	}
-
-	delete[] lstOfNeighborhods;
-	delete[] vertices;
-}*/
