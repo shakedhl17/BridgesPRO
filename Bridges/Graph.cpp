@@ -248,6 +248,7 @@ void Graph::printBridges() const
 };
 
 //D'tor
+/*
 Graph::~Graph()
 {
 	delete[] parents;
@@ -262,4 +263,4 @@ Graph::~Graph()
 
 	delete[] lstOfNeighborhods;
 	delete[] vertices;
-}
+}*/

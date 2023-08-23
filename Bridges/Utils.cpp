@@ -44,7 +44,6 @@ void printBridges(Graph& G)
 	Graph* GT = createGt(G);
 	GT->DFSByMainLoop(endList);
 	GT->printBridges();
-	delete GT;
 }
 
 Graph* createGt(Graph& G)

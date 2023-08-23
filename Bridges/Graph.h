@@ -18,7 +18,7 @@ class Graph
 
 public:
 	Graph(const int n,bool isDir);
-	~Graph();
+	//~Graph();
 	void AddEdge(int v, int u);
 	void DeleteEdge(int v, int u);
 	LinkedList<int> getEndList() const;
